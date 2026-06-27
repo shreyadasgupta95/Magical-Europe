@@ -1,483 +1,662 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Europe Trip — Sep 10–25, 2025</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Europe Trip — Sep 10–25, 2026</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { margin: 0; background: #f3f4f6; font-family: sans-serif; }
+    body { margin:0; background:#f3f4f6; font-family:ui-sans-serif,system-ui,sans-serif; }
+    .sticky-nav { position:sticky; top:0; z-index:50; background:#1e293b; }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState } = React;
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
 
-    const days = [
-      {
-        id: 1, date: "Wed, 10 Sep", day: "Day 1", phase: "germany",
-        city: "Düsseldorf", subtitle: "Arrival Day", emoji: "🇩🇪",
-        activities: [
-          { icon: "✈️", text: "Land at Düsseldorf Airport at 15:45" },
-          { icon: "🏨", text: "Check in & freshen up — stay central near Altstadt" },
-          { icon: "🌊", text: "Evening stroll along the Rhine Promenade" },
-          { icon: "🍻", text: "Dinner in Altstadt — try Altbier, the local dark brew" },
-        ],
-        tip: "Düsseldorf's Altstadt is nicknamed 'the longest bar in the world' — 260+ bars in a compact area. Perfect for a relaxed first evening. Rest early, big trip ahead!",
-        travelOptions: null,
-      },
-      {
-        id: 2, date: "Thu, 11 Sep", day: "Day 2", phase: "germany",
-        city: "Cologne", subtitle: "Day Trip from Düsseldorf", emoji: "⛪",
-        activities: [
-          { icon: "🚆", text: "Morning train to Cologne (30–40 min from Düsseldorf HBF)" },
-          { icon: "⛪", text: "Cologne Cathedral (Dom) — UNESCO World Heritage, one of the world's tallest churches" },
-          { icon: "🌉", text: "Hohenzollern Bridge & love locks tradition" },
-          { icon: "🍺", text: "Kölsch beer in a traditional Kölner Brauhaus" },
-          { icon: "🚆", text: "Return to Düsseldorf for the night (early start tomorrow!)" },
-        ],
-        tip: "Leave your luggage at the Düsseldorf hotel — just take a day bag. Return by early evening to rest before your Barcelona flight tomorrow.",
-        travelOptions: {
-          label: "Day Trip",
-          from: "Düsseldorf HBF",
-          to: "Cologne HBF",
-          options: [
-            { mode: "🚆 Regional Train (RE/RB)", dur: "30–40 min each way", cost: "~€10–20 return", note: "Runs every 20–30 min all day" },
-          ],
-        },
-      },
-      {
-        id: 3, date: "Fri, 12 Sep", day: "Day 3", phase: "travel",
-        city: "Düsseldorf → Barcelona", subtitle: "Travel Day", emoji: "✈️",
-        activities: [
-          { icon: "🧳", text: "Check out of Düsseldorf hotel" },
-          { icon: "✈️", text: "Fly DUS → Barcelona El Prat (BCN) — aim for a morning flight" },
-          { icon: "🚇", text: "Metro L9 Sud (€5.90) or Aerobus (€6.75) to city centre" },
-          { icon: "🏨", text: "Check in — recommend El Born or Gothic Quarter area" },
-          { icon: "🚶", text: "Evening walk through the Gothic Quarter (Barri Gòtic) & tapas dinner" },
-        ],
-        tip: "Book an early morning flight from DUS to get a full afternoon in Barcelona. El Born district is ideal — walking distance to Sagrada Família, Picasso Museum and the beach.",
-        travelOptions: {
-          label: "Flight",
-          from: "Düsseldorf (DUS)",
-          to: "Barcelona El Prat (BCN)",
-          options: [
-            { mode: "✈️ Direct Flight", dur: "~2h 20 min", cost: "€50–150 one-way", note: "Ryanair, Eurowings, Vueling, Lufthansa" },
-          ],
-        },
-      },
-      {
-        id: 4, date: "Sat, 13 Sep", day: "Day 4", phase: "spain",
-        city: "Barcelona", subtitle: "Gaudí & the Beach", emoji: "🇪🇸",
-        activities: [
-          { icon: "⛪", text: "Sagrada Família — Gaudí's extraordinary unfinished basilica (pre-book!)" },
-          { icon: "🌿", text: "Park Güell — panoramic views over the city (timed entry required)" },
-          { icon: "🛍️", text: "La Rambla stroll & La Boqueria Market" },
-          { icon: "🏖️", text: "Barceloneta Beach for the evening" },
-          { icon: "🍹", text: "Nightlife in El Born or Barceloneta area" },
-        ],
-        tip: "🚨 Book Sagrada Família (€26–36) and Park Güell (€10) online NOW — they sell out weeks in advance. Saturday makes it even busier.",
-        travelOptions: null,
-      },
-      {
-        id: 5, date: "Sun, 14 Sep", day: "Day 5", phase: "spain",
-        city: "Barcelona", subtitle: "Culture & Neighbourhoods", emoji: "🇪🇸",
-        activities: [
-          { icon: "🎨", text: "Picasso Museum in El Born (free entry Sunday evenings after 3pm)" },
-          { icon: "🏰", text: "Montjuïc Castle & gondola cable car" },
-          { icon: "🍽️", text: "El Born neighbourhood tapas crawl" },
-          { icon: "⚽", text: "Camp Nou Stadium Tour — optional (~€25, book ahead)" },
-          { icon: "🎵", text: "Palau de la Música Catalana — stunning Modernista concert hall" },
-        ],
-        tip: "Explore the Gothic Quarter early morning before crowds hit — it's magical when quiet. Palau de la Música is stunning even just to walk past.",
-        travelOptions: null,
-      },
-      {
-        id: 6, date: "Mon, 15 Sep", day: "Day 6", phase: "travel",
-        city: "Barcelona → Ibiza", subtitle: "Travel Day", emoji: "✈️",
-        activities: [
-          { icon: "✈️", text: "Morning flight or evening ferry to Ibiza" },
-          { icon: "🏨", text: "Check in — recommend Ibiza Town (Eivissa) for the best location" },
-          { icon: "🏰", text: "Dalt Vila (Ibiza's UNESCO walled Old Town) — explore the fortress" },
-          { icon: "🌅", text: "Sunset at Café del Mar, San Antonio — the most iconic sunset in Ibiza" },
-        ],
-        tip: "The overnight ferry from Barcelona saves a hotel night and you wake up in Ibiza — an experience in itself! Book a cabin for comfort. Flying is faster if you prefer.",
-        travelOptions: {
-          label: "Flight or Ferry",
-          from: "Barcelona (BCN)",
-          to: "Ibiza (IBZ)",
-          options: [
-            { mode: "✈️ Direct Flight", dur: "~1 hour", cost: "€40–100 one-way", note: "Vueling, Iberia, Ryanair — 5+ daily flights" },
-            { mode: "⛴️ Overnight Ferry", dur: "~8–9 hours", cost: "€50–120 (seat) / €90–180 (cabin)", note: "Baleàlia / Trasmediterranea — departs evening, arrives morning" },
-          ],
-        },
-      },
-      {
-        id: 7, date: "Tue, 16 Sep", day: "Day 7", phase: "spain",
-        city: "Ibiza", subtitle: "Beaches & Formentera", emoji: "🏝️",
-        activities: [
-          { icon: "⛵", text: "Day trip to Formentera — most pristine beaches in the Balearics (30 min ferry, ~€20–30 return)" },
-          { icon: "🏖️", text: "Ses Salines Beach & UNESCO Nature Reserve" },
-          { icon: "🌊", text: "Cala Comte — Ibiza's most famous sunset beach" },
-          { icon: "🛒", text: "Las Dalias Hippie Market (Saturdays/Sundays) or Es Cana (Wednesdays, seasonal)" },
-        ],
-        tip: "Formentera is one of the Mediterranean's most beautiful and least-developed islands. Don't miss it — bring snorkel gear, the water clarity is extraordinary.",
-        travelOptions: null,
-      },
-      {
-        id: 8, date: "Wed, 17 Sep", day: "Day 8", phase: "spain",
-        city: "Ibiza", subtitle: "Island Life & Nightlife", emoji: "🏝️",
-        activities: [
-          { icon: "🏖️", text: "Cala Bassa & Cala Gracio beaches — beautiful coves" },
-          { icon: "🚶", text: "Ibiza Town port, marina and boutique streets" },
-          { icon: "🌅", text: "San Antonio sunset strip — iconic for a reason" },
-          { icon: "🎵", text: "Evening: Pacha or Ushuaïa — check closing party dates for September" },
-        ],
-        tip: "September is 'closing party' season in Ibiza — some of the biggest club nights of the year happen now. Check event calendars in advance.",
-        travelOptions: null,
-      },
-      {
-        id: 9, date: "Thu, 18 Sep", day: "Day 9", phase: "travel",
-        city: "Ibiza → Valencia", subtitle: "Travel + Explore Valencia", emoji: "✈️",
-        activities: [
-          { icon: "✈️", text: "Morning flight Ibiza → Valencia (~45 min)" },
-          { icon: "🏛️", text: "City of Arts & Sciences — Calatrava's jaw-dropping futuristic complex" },
-          { icon: "🛒", text: "Valencia Central Market — one of Europe's most stunning covered markets" },
-          { icon: "🥘", text: "Authentic Valencian Paella — this is where it was invented!" },
-          { icon: "🌆", text: "El Carmen neighbourhood — street art, history & vibrant bar scene" },
-        ],
-        tip: "Valencia is hugely underrated. The City of Arts & Sciences at golden hour is unforgettable. Eat paella at lunch, not dinner — that's how locals do it.",
-        travelOptions: {
-          label: "Flight",
-          from: "Ibiza (IBZ)",
-          to: "Valencia (VLC)",
-          options: [
-            { mode: "✈️ Direct Flight", dur: "~45 min", cost: "€40–80 one-way", note: "Vueling, Air Europa — multiple daily departures" },
-          ],
-        },
-      },
-      {
-        id: 10, date: "Fri, 19 Sep", day: "Day 10", phase: "travel",
-        city: "Valencia → Munich", subtitle: "Travel Day — Back to Germany", emoji: "✈️",
-        activities: [
-          { icon: "🌅", text: "Morning: Turia Gardens walk or last stroll along Valencia's beach" },
-          { icon: "✈️", text: "Fly Valencia (VLC) → Munich (MUC)" },
-          { icon: "🏨", text: "Check into Munich hotel near Theresienwiese or city centre" },
-          { icon: "🏛️", text: "Evening: Marienplatz, Neues Rathaus glockenspiel & Hofbräuhaus dinner" },
-        ],
-        tip: "🚨 Munich hotels during Oktoberfest book up months in advance at 3–4× normal prices. If you haven't booked, do it TODAY. Stay near Theresienwiese U-Bahn (U4/U5 lines).",
-        travelOptions: {
-          label: "Flight",
-          from: "Valencia (VLC)",
-          to: "Munich (MUC)",
-          options: [
-            { mode: "✈️ Direct Flight", dur: "~2 hours", cost: "€80–180 one-way", note: "Ryanair, Vueling, Lufthansa — book early" },
-            { mode: "✈️ Via Barcelona (BCN)", dur: "~4–5h total incl. connection", cost: "€100–200", note: "If no direct available — connects via Iberia" },
-          ],
-        },
-      },
-      {
-        id: 11, date: "Sat, 20 Sep", day: "Day 11", phase: "oktoberfest",
-        city: "Munich — Oktoberfest", subtitle: "Opening Day! 🎺", emoji: "🍺",
-        activities: [
-          { icon: "🎺", text: "Opening ceremony: barrel tapping at noon in the Schottenhamel tent — 'O'zapft is!'" },
-          { icon: "🍺", text: "Beer tents: Hofbräu, Paulaner, Augustiner, Hacker-Pschorr" },
-          { icon: "🥨", text: "Traditional food: Brezn (giant pretzels), Weisswurst, Schweinshaxe (pork knuckle)" },
-          { icon: "🎡", text: "Fairground rides and classic carnival atmosphere" },
-          { icon: "👘", text: "Wear Dirndl/Lederhosen — rent in Munich for ~€30–60 or buy to keep" },
-        ],
-        tip: "🚨 Beer tent table reservations are ESSENTIAL for Opening Saturday — contact tents directly (many are fully booked months out). Without one, arrive before 9am to queue. You're here on OPENING DAY — the most electric moment of the year.",
-        travelOptions: null,
-      },
-      {
-        id: 12, date: "Sun, 21 Sep", day: "Day 12", phase: "oktoberfest",
-        city: "Munich — Oktoberfest", subtitle: "Day 2 🍺", emoji: "🍺",
-        activities: [
-          { icon: "🍺", text: "Try different tents: Löwenbräu, Käfer (upscale/celebrity), Spaten, Augustiner" },
-          { icon: "🏛️", text: "Afternoon: Marienplatz, Frauenkirche & Viktualienmarkt" },
-          { icon: "🌿", text: "English Garden — world's largest urban park (bigger than Central Park)" },
-          { icon: "🏰", text: "Nymphenburg Palace & gardens (20 min from centre by tram)" },
-        ],
-        tip: "Sunday is slightly calmer than Saturday. The Käfer tent is the celebrity/upscale option. The English Garden Eisbach river surfers are a uniquely Munich sight.",
-        travelOptions: null,
-      },
-      {
-        id: 13, date: "Mon, 22 Sep", day: "Day 13", phase: "germany",
-        city: "Neuschwanstein Castle", subtitle: "Day Trip — Bavarian Alps", emoji: "🏰",
-        activities: [
-          { icon: "🚆", text: "Early train from Munich HBF to Füssen (2 hours)" },
-          { icon: "🏰", text: "Neuschwanstein Castle — the fairytale castle that inspired Disney's Sleeping Beauty" },
-          { icon: "🏰", text: "Hohenschwangau Castle nearby — King Ludwig II's childhood home" },
-          { icon: "📸", text: "Marienbrücke Bridge — the iconic viewpoint of Neuschwanstein" },
-          { icon: "🏔️", text: "Alpine village of Füssen & Forggensee lake views" },
-        ],
-        tip: "Book Neuschwanstein tickets online now (~€22 + €2.50 booking fee) — they sell out! A Bayern Ticket (€29/day) covers all public transport return from Munich. Leave before 8am.",
-        travelOptions: {
-          label: "Day Trip",
-          from: "Munich HBF",
-          to: "Füssen → Neuschwanstein",
-          options: [
-            { mode: "🚆 Train + Bus", dur: "~2h each way", cost: "€29 Bayern Ticket (all-day return)", note: "Trains every 2h; Bus 73/78 from Füssen station to castle" },
-            { mode: "🚌 Guided Coach Tour", dur: "~10h total", cost: "€30–60/person incl. transport", note: "Many daily tours depart Munich central" },
-          ],
-        },
-      },
-      {
-        id: 14, date: "Tue, 23 Sep", day: "Day 14", phase: "germany",
-        city: "Nuremberg", subtitle: "Day Trip — Medieval Wonders", emoji: "🏯",
-        activities: [
-          { icon: "🚆", text: "Fast ICE train Munich → Nuremberg (1 hour)" },
-          { icon: "🏰", text: "Imperial Castle of Nuremberg — panoramic views over medieval rooftops" },
-          { icon: "🚶", text: "Medieval Old Town & Hauptmarkt (main market square)" },
-          { icon: "🏛️", text: "Documentation Centre Nazi Party Rallying Grounds — essential, profound museum" },
-          { icon: "🌭", text: "Nuremberg Bratwurst — the city's famous small sausages with sauerkraut" },
-        ],
-        tip: "Allow at least 2 hours at the Documentation Centre — one of Europe's most important modern history museums. Combine with the breathtaking medieval old town for a full day.",
-        travelOptions: {
-          label: "Day Trip",
-          from: "Munich HBF",
-          to: "Nuremberg HBF",
-          options: [
-            { mode: "🚆 ICE Train", dur: "~1 hour each way", cost: "€25–50 return (Sparpreis if booked early)", note: "Trains every 30 min throughout the day" },
-          ],
-        },
-      },
-      {
-        id: 15, date: "Wed, 24 Sep", day: "Day 15", phase: "travel",
-        city: "Munich → Düsseldorf", subtitle: "Travel Day", emoji: "✈️",
-        activities: [
-          { icon: "🧳", text: "Check out of Munich hotel" },
-          { icon: "🚆", text: "Travel to Düsseldorf by ICE train or direct flight" },
-          { icon: "🏨", text: "Check into hotel near Düsseldorf Airport or city centre" },
-          { icon: "🚶", text: "Optional: evening walk on Königsallee (KO Allee) — one of Europe's most elegant shopping streets" },
-        ],
-        tip: "The ICE train is comfortable, scenic, and goes city-centre to city-centre — no airport faff. If flying, book afternoon to have a relaxed morning. Arrive in Düsseldorf by early evening.",
-        travelOptions: {
-          label: "Train or Flight",
-          from: "Munich (MUC / HBF)",
-          to: "Düsseldorf (DUS / HBF)",
-          options: [
-            { mode: "🚆 ICE Train", dur: "~4h 30 min", cost: "€50–130 (Sparpreis if booked early)", note: "City-centre to city-centre, comfortable and scenic" },
-            { mode: "✈️ Direct Flight", dur: "~1h 10 min", cost: "€60–150 one-way", note: "Eurowings, Lufthansa — multiple daily" },
-          ],
-        },
-      },
-      {
-        id: 16, date: "Thu, 25 Sep", day: "Day 16", phase: "germany",
-        city: "Düsseldorf", subtitle: "Departure Day 🛫", emoji: "🛫",
-        activities: [
-          { icon: "☀️", text: "Morning: last stroll through Altstadt or Königsallee" },
-          { icon: "🛒", text: "Last-minute shopping or coffee at a riverside café" },
-          { icon: "🚗", text: "Head to Düsseldorf Airport — allow 2.5–3h before departure" },
-          { icon: "✈️", text: "Flight departs Düsseldorf (DUS) at 15:00 — safe travels! 🎉" },
-        ],
-        tip: "Leave for the airport by 12:30 at the latest. DUS Airport has great Terminal B dining. Check in online the night before to save time.",
-        travelOptions: null,
-      },
-    ];
+// ───────────────────────────── DATA ─────────────────────────────
 
-    const phaseConfig = {
-      germany: {
-        cardBg: "bg-blue-50", cardBorder: "border-blue-200",
-        headerBg: "bg-blue-800", badge: "bg-blue-100 text-blue-800",
-      },
-      spain: {
-        cardBg: "bg-rose-50", cardBorder: "border-rose-200",
-        headerBg: "bg-rose-700", badge: "bg-rose-100 text-rose-800",
-      },
-      oktoberfest: {
-        cardBg: "bg-amber-50", cardBorder: "border-amber-200",
-        headerBg: "bg-amber-600", badge: "bg-amber-100 text-amber-800",
-      },
-      travel: {
-        cardBg: "bg-slate-50", cardBorder: "border-slate-200",
-        headerBg: "bg-slate-600", badge: "bg-slate-100 text-slate-700",
-      },
-    };
+const days = [
+  {
+    id:1, date:"Thu, 10 Sep", day:"Day 1", phase:"germany",
+    city:"Düsseldorf", sub:"Arrival Day", emoji:"🇩🇪",
+    am:"Land at Düsseldorf Airport at 15:45. Train or taxi to hotel, check in, freshen up.",
+    pm:"Rhine Promenade walk, Altstadt dinner, early night.",
+    tip:"Keep it light after the flight. Stay near Altstadt or Hauptbahnhof (Hbf) for the best balance of atmosphere and airport convenience.",
+    travel: null
+  },
+  {
+    id:2, date:"Fri, 11 Sep", day:"Day 2", phase:"germany",
+    city:"Düsseldorf", sub:"Explore the City", emoji:"🇩🇪",
+    am:"Königsallee (KO Allee), Rhine Promenade, Altstadt, MedienHafen harbour district.",
+    pm:"Optional half-day trip to Cologne — Cathedral (Dom), Hohenzollern Bridge, Kölsch beer. Return to Düsseldorf for dinner.",
+    tip:"Do not change hotels. You fly from Düsseldorf tomorrow. If skipping Cologne, more time in Düsseldorf's excellent Altstadt.",
+    travel:{ from:"Düsseldorf HBF", to:"Cologne HBF (optional day trip)", opts:[{ mode:"🚆 Regional Train (RE)", dur:"30–40 min each way", cost:"~€10–20 return", note:"Every 20–30 min all day" }] }
+  },
+  {
+    id:3, date:"Sat, 12 Sep", day:"Day 3", phase:"spain",
+    city:"Barcelona", sub:"Arrive + La Rambla + Gothic Quarter", emoji:"🇪🇸",
+    am:"Fly DUS → BCN. Check in — Eixample for Gaudí/metro balance; El Born or Gothic edge for nightlife.",
+    pm:"La Rambla walk, La Boqueria Market snacks. Gothic Quarter: Pont del Bisbe, Plaça Reial, Cathedral lanes, El Born. Self-guided tapas crawl and cocktail/bar-hop.",
+    tip:"Book an afternoon arrival to maximise the evening. Do NOT book organized pub crawl packages — Barcelona has a citywide 24-hour pub crawl ban. A self-guided El Born/Gothic crawl is better anyway.",
+    travel:{ from:"Düsseldorf (DUS)", to:"Barcelona El Prat (BCN)", opts:[{ mode:"✈️ Direct Flight", dur:"~2h 05–20 min", cost:"€80–180 one-way", note:"Ryanair, Eurowings, Vueling, Lufthansa" }] }
+  },
+  {
+    id:4, date:"Sun, 13 Sep", day:"Day 4", phase:"spain",
+    city:"Barcelona", sub:"Gaudí + Architecture + Park Güell", emoji:"🇪🇸",
+    am:"Sagrada Família (late morning — Sunday opens later than weekdays). Then Passeig de Gràcia: Casa Batlló, Casa Milà/La Pedrera and Modernista facades.",
+    pm:"Park Güell timed-entry (late afternoon). Beach sunset at Barceloneta or Bogatell. Drinks in El Born or Gothic edge.",
+    tip:"🚨 Book Sagrada Família (€26–36) and Park Güell (€10) online NOW — both sell out weeks in advance. Sunday's later opening makes a late-morning Sagrada slot perfect.",
+    travel:null
+  },
+  {
+    id:5, date:"Mon, 14 Sep", day:"Day 5", phase:"spain",
+    city:"Montserrat (Day Trip)", sub:"Mountain Monastery", emoji:"⛰️",
+    am:"Early FGC train from Plaça Espanya → rack railway or cable car up. Monastery, Basilica, Black Madonna. Hikes available if wanted.",
+    pm:"Return to Barcelona. Poble-sec/Carrer de Blai tapas & pintxos crawl. Calmer dinner night.",
+    tip:"The big nature/spiritual day. Go early. Choose Trans Montserrat or Tot Montserrat ticket at Plaça Espanya depending on what inclusions you want. Keep nightlife moderate tonight.",
+    travel:{ from:"Barcelona Plaça Espanya", to:"Montserrat (FGC + rack railway)", opts:[{ mode:"🚆 FGC + Rack Railway/Cable Car", dur:"~1h each way", cost:"€25–35 return (transport incl.)", note:"Trans Montserrat or Tot Montserrat day tickets" }] }
+  },
+  {
+    id:6, date:"Tue, 15 Sep", day:"Day 6", phase:"spain",
+    city:"Barcelona", sub:"Montjuïc + Beach", emoji:"🇪🇸",
+    am:"Plaça Espanya, MNAC museum terrace, Olympic Ring, Montjuïc Castle and cable car.",
+    pm:"Barcelona beach — Bogatell is better for space; Barceloneta is convenient. Optional sunset catamaran. Final Barcelona dinner in El Born, Gràcia or Eixample.",
+    tip:"Use as a flexible catch-up day if any Gaudí slot needs moving. Ibiza has far better boat parties — keep the catamaran optional here.",
+    travel:null
+  },
+  {
+    id:7, date:"Wed, 16 Sep", day:"Day 7", phase:"ibiza",
+    city:"Ibiza", sub:"Arrive + RESISTANCE Closing Party 🎉", emoji:"🏝️",
+    am:"Fly BCN → IBZ — book morning or early afternoon. Check in: Playa d'en Bossa (party-central) or Ibiza Town (more balanced). Beach/pool recovery.",
+    pm:"PRIORITY NIGHT: Amnesia RESISTANCE Ibiza Closing Party, 23:00–06:00. Artists: Adam Beyer, Eric Prydz, Mind Against, I Hate Models, Nicole Moudaber B2B Estella Boersma. Alternatives if needed: Hï Our House, Pacha Mau P, UNVRS Paradise.",
+    tip:"🚨 This is why the route is built to arrive on 16 Sep. Book RESISTANCE tickets immediately (from ~€60) through Amnesia's official site. Do NOT book a late BCN–IBZ flight — you need recovery time before midnight.",
+    travel:{ from:"Barcelona (BCN)", to:"Ibiza (IBZ)", opts:[{ mode:"✈️ Direct Flight", dur:"~55 min – 1h 10", cost:"€40–120 one-way", note:"Vueling, Iberia, Ryanair — book morning/early afternoon" }] }
+  },
+  {
+    id:8, date:"Thu, 17 Sep", day:"Day 8", phase:"ibiza",
+    city:"Ibiza", sub:"Beach Club + DJ Night", emoji:"🏝️",
+    am:"Choose ONE daytime: O Beach Music 13:00–22:00 (from ~€15) | Bottomless Brunch Boat Party 13:00–17:00 | Pukka Up Sunset Boat Party 17:00–20:00 (from ~€65) | Formentera With Benefits 10:30–20:15 (from ~€180 — premium yacht option).",
+    pm:"Choose ONE night: Ushuaïa Martin Garrix 17:00–23:00 (from ~€75) | Pacha Purple Disco Machine 23:00–06:00 (from ~€30) | Hï HUGEL 23:30 | Chinois Defected 23:30–06:30 (from ~€30) | Amnesia You&Me 23:00–06:00.",
+    tip:"Best balanced day — one daytime event + one night. Do NOT try to stack everything. Formentera With Benefits is the premium yacht/lunch option if budget allows.",
+    travel:null
+  },
+  {
+    id:9, date:"Fri, 18 Sep", day:"Day 9", phase:"ibiza",
+    city:"Ibiza", sub:"Biggest Party Day 🎉", emoji:"🏝️",
+    am:"Choose ONE: O Beach Pool Party 13:00–22:00 | Oceanbeat Afternoon Boat Party 14:30–17:30 (from ~€100) | Cruise Crush 14:30–17:30 (from ~€69) | Aftersun 17:30–20:30.",
+    pm:"Top stack: Ushuaïa Calvin Harris 17:00–23:00 (from ~€140) → then Amnesia Glitterbox 23:30–06:00 (from ~€60) OR Pacha Music On 23:00–06:00 (from ~€70) OR Hï CAMELPHAT 23:30.",
+    tip:"Biggest party day of the trip. Book a later IBZ–MUC flight for Sat 19 Sep if planning to stay until sunrise. Buy through official club/venue sites only.",
+    travel:null
+  },
+  {
+    id:10, date:"Sat, 19 Sep", day:"Day 10", phase:"travel",
+    city:"Ibiza → Munich", sub:"Travel + Recovery Day", emoji:"✈️",
+    am:"Fly IBZ → MUC (late morning or afternoon direct, or one-stop via BCN/PMI/MAD/FRA). Check in near Theresienwiese or Hbf — note Oktoberfest opens today.",
+    pm:"Marienplatz, Viktualienmarkt, easy dinner. Prepare Oktoberfest outfit, cash and meeting points for tomorrow.",
+    tip:"Recovery day after Ibiza before your first Oktoberfest session. Avoid booking a very early flight if you were out until sunrise on Fri 18. Oktoberfest officially opens today (Sat 19 Sep) with the barrel tapping, but this is your travel day.",
+    travel:{ from:"Ibiza (IBZ)", to:"Munich (MUC)", opts:[{ mode:"✈️ Direct Flight", dur:"~2h 10–25 min", cost:"€120–260 (high season / Oktoberfest)", note:"Book early. Backup: one-stop via BCN, PMI, MAD or FRA" }] }
+  },
+  {
+    id:11, date:"Sun, 20 Sep", day:"Day 11", phase:"oktoberfest",
+    city:"Munich — Oktoberfest", sub:"Day 1 🍺 Opening Weekend", emoji:"🍺",
+    am:"Optional: traditional costume and marksmen parade from 10:00. Then Theresienwiese — tents, rides, food.",
+    pm:"Beer tents: Hofbräu, Paulaner, Augustiner, Hacker-Pschorr. Classic food: giant Brezn, Weisswurst, Schweinshaxe (pork knuckle). Go early — it's opening weekend Sunday.",
+    tip:"🚨 Beer tent table reservations are ESSENTIAL for weekend sessions — contact tents directly (often fully booked months out). Without one, queue before 9am. Rent Dirndl/Lederhosen in Munich for ~€30–60.",
+    travel:null
+  },
+  {
+    id:12, date:"Mon, 21 Sep", day:"Day 12", phase:"oktoberfest",
+    city:"Munich — Oktoberfest", sub:"Day 2 🍺", emoji:"🍺",
+    am:"Start late morning or early afternoon — Monday is better for tent flexibility than Sunday.",
+    pm:"Try different tents: Löwenbräu, Käfer (upscale/celebrity), Spaten, Augustiner. Or a calmer Munich beer hall dinner (Hofbräuhaus) if you want a break from the festival.",
+    tip:"Monday gives much more flexibility for getting into tents. The Käfer tent is the upscale celebrity option. English Garden and Eisbach river surfers are a great afternoon addition.",
+    travel:null
+  },
+  {
+    id:13, date:"Tue, 22 Sep", day:"Day 13", phase:"germany",
+    city:"Munich", sub:"City Exploration", emoji:"🇩🇪",
+    am:"Marienplatz, Frauenkirche, Residenz Palace and Treasury (allow 2–3 hrs), Viktualienmarkt.",
+    pm:"English Garden — Eisbach surfers, beer gardens. BMW Welt/Olympiapark. Calmer local dinner.",
+    tip:"Good recovery and sightseeing day after two Oktoberfest sessions. The Residenz is one of Germany's most impressive palaces — genuinely worth spending half a day inside.",
+    travel:null
+  },
+  {
+    id:14, date:"Wed, 23 Sep", day:"Day 14", phase:"germany",
+    city:"Bavaria Day Trip", sub:"Castle or Alps — Pick One", emoji:"🏰",
+    am:"Choose ONE: Neuschwanstein/Füssen — fairytale castle, 2h from Munich. OR Garmisch-Partenkirchen — dramatic Alps scenery and Zugspitze access, 1.5h from Munich.",
+    pm:"Return to Munich for dinner. Pack for Düsseldorf.",
+    tip:"Do not attempt both — one is a full day. Book Neuschwanstein tickets online (~€22 + booking fee) to skip queues. Garmisch offers stunning Alps without the castle crowds.",
+    travel:{ from:"Munich HBF", to:"Füssen OR Garmisch-Partenkirchen", opts:[{ mode:"🚆 Train to Füssen (Neuschwanstein)", dur:"~2h each way", cost:"€29 Bayern Ticket (all-day public transport)", note:"Trains every 2h; Bus 73/78 from Füssen to castle" },{ mode:"🚆 Train to Garmisch (Alps)", dur:"~1h 30 each way", cost:"€29 Bayern Ticket", note:"Hourly trains from Munich HBF" }] }
+  },
+  {
+    id:15, date:"Thu, 24 Sep", day:"Day 15", phase:"travel",
+    city:"Munich → Düsseldorf", sub:"Travel Day", emoji:"✈️",
+    am:"ICE train from Munich HBF — aim for morning or early afternoon departure. City-centre to city-centre — no airport transfers needed.",
+    pm:"Check in near Hbf or airport. Simple dinner, final packing.",
+    tip:"Train is strongly recommended over flying for this route. Book a Sparpreis ticket early for €30–50. If flying, book the afternoon to have a relaxed Munich morning.",
+    travel:{ from:"Munich HBF", to:"Düsseldorf HBF", opts:[{ mode:"🚆 ICE Train (recommended)", dur:"~4h 33 min", cost:"€30–140 (Sparpreis early / flexible later)", note:"City-centre to city-centre — most convenient option" },{ mode:"✈️ Direct Flight (alternative)", dur:"~1h 10 min", cost:"€60–150", note:"Eurowings, Lufthansa — only if train is full or very pricey" }] }
+  },
+  {
+    id:16, date:"Fri, 25 Sep", day:"Day 16", phase:"germany",
+    city:"Düsseldorf", sub:"Departure Day 🛫", emoji:"🛫",
+    am:"Leave hotel around 11:30–12:00. Head to Düsseldorf Airport — 10–20 min from most central hotels.",
+    pm:"Flight from Düsseldorf (DUS) departs ~15:00. No major sightseeing planned — rest and travel.",
+    tip:"Allow 2.5–3 hrs at the airport. Check in online the night before. DUS has good Terminal B dining if you arrive early. Safe travels! 🎉",
+    travel:null
+  }
+];
 
-    const filters = [
-      { key: "all", label: "All 16 Days", activeClass: "bg-slate-900 text-white" },
-      { key: "germany", label: "🇩🇪 Germany", activeClass: "bg-blue-800 text-white" },
-      { key: "spain", label: "🇪🇸 Spain", activeClass: "bg-rose-700 text-white" },
-      { key: "oktoberfest", label: "🍺 Oktoberfest", activeClass: "bg-amber-600 text-white" },
-      { key: "travel", label: "✈️ Travel Days", activeClass: "bg-slate-600 text-white" },
-    ];
+const bcnExperiences = [
+  { title:"La Rambla + La Boqueria Market", slot:"Sat 12 Sep", how:"After hotel check-in. La Boqueria open Mon–Sat 08:00–20:30. Market snacks then walk into Gothic Quarter.", why:"Arrival-day energy, food market intro." },
+  { title:"Gothic Quarter (Barri Gòtic)", slot:"Sat 12 Sep", how:"Plaça Catalunya → La Rambla → Plaça Reial → Cathedral area → Pont del Bisbe → El Born.", why:"Best paired with self-guided tapas crawl." },
+  { title:"Self-guided Tapas & Bar Crawl", slot:"Sat 12 + Mon 14 Sep", how:"El Born, Gothic edge, or Poble-sec/Carrer de Blai. No organized pub-crawl packages (citywide ban).", why:"Covers tapas/bar-hop feel legally and more authentically." },
+  { title:"Sagrada Família", slot:"Sun 13 Sep (late morning)", how:"Book official timed tickets. Guided or tower ticket recommended. Sunday opens later than weekdays.", why:"Non-negotiable highlight. Book NOW — sells out." },
+  { title:"Casa Batlló + Casa Milà + Modernista Walk", slot:"Sun 13 Sep", how:"Walk Passeig de Gràcia after Sagrada. Choose one interior or enjoy dramatic exteriors.", why:"Efficient Gaudí architecture cluster." },
+  { title:"Park Güell", slot:"Sun 13 Sep (late afternoon)", how:"Book a late-afternoon timed slot on the official site. Entry bands from 09:30 to 19:30.", why:"Best light for views over Barcelona." },
+  { title:"Montserrat", slot:"Mon 14 Sep (full day)", how:"Early FGC train from Plaça Espanya → rack railway or cable car. Trans Montserrat or Tot Montserrat ticket.", why:"Full-day mountain and monastery break." },
+  { title:"Montjuïc", slot:"Tue 15 Sep", how:"Plaça Espanya, MNAC terrace, Olympic Ring, Montjuïc Castle/cable car.", why:"City views, history, flexible day." },
+  { title:"Barcelona Beach", slot:"Sun 13 or Tue 15 Sep", how:"Bogatell for more space; Barceloneta for convenience. Late afternoon/sunset to avoid hottest hours.", why:"Essential chill and beach time." }
+];
 
-    const bookings = [
-      { icon: "🏨", text: "Munich Oktoberfest hotel — 3–4× normal price, books out months ahead" },
-      { icon: "⛪", text: "Sagrada Família tickets — sell out weeks in advance (€26–36)" },
-      { icon: "🌿", text: "Park Güell timed-entry — book online (€10)" },
-      { icon: "🏰", text: "Neuschwanstein Castle tickets — avoid huge queues (~€22)" },
-      { icon: "🍺", text: "Oktoberfest beer tent reservations — very limited, contact tents directly" },
-      { icon: "✈️", text: "All flights — prices rise significantly as September approaches" },
-    ];
+const ibizaDays = [
+  {
+    date:"Wed 16 Sep",
+    daytime:"Arrive from Barcelona. Beach/pool recovery. Dalt Vila (UNESCO Old Town) sunset walk if energy allows.",
+    priority:true,
+    nightName:"RESISTANCE Ibiza Closing Party @ Amnesia",
+    nightTime:"23:00–06:00",
+    nightCost:"From ~€60",
+    nightArtists:"Adam Beyer · Eric Prydz · Mind Against · I Hate Models · Nicole Moudaber B2B Estella Boersma",
+    nightNote:"MUST-BUY. This is why the route arrives on 16 Sep.",
+    nightAlts:["Hï Our House","Pacha Mau P","UNVRS Paradise"]
+  },
+  {
+    date:"Thu 17 Sep",
+    daytime:"Choose ONE: O Beach Music 13:00–22:00 (~€15+) | Bottomless Brunch Boat Party 13:00–17:00 | Pukka Up Sunset Boat Party 17:00–20:00 (~€65+) | Formentera With Benefits 10:30–20:15 (~€180+, premium yacht day).",
+    priority:false,
+    nightName:"Choose ONE Night Event",
+    nightTime:"17:00 (Ushuaïa) or from 23:00 (clubs)",
+    nightCost:"€30–75+",
+    nightArtists:"",
+    nightNote:"Best balanced day — pick ONE daytime and ONE night. Don't stack everything.",
+    nightAlts:["Ushuaïa Martin Garrix (17:00–23:00, from ~€75)","Pacha Purple Disco Machine (23:00–06:00, from ~€30)","Hï HUGEL (23:30)","Chinois Defected (23:30–06:30, from ~€30)","Amnesia You&Me (23:00–06:00)"]
+  },
+  {
+    date:"Fri 18 Sep",
+    daytime:"Choose ONE: O Beach Pool Party 13:00–22:00 | Oceanbeat Afternoon Boat Party 14:30–17:30 (~€100+) | Cruise Crush 14:30–17:30 (~€69+) | Aftersun 17:30–20:30.",
+    priority:true,
+    nightName:"Calvin Harris @ Ushuaïa + Late-Night Club",
+    nightTime:"17:00–23:00 (Calvin Harris) then club until 06:00",
+    nightCost:"~€140 (Ushuaïa) + €60–70 second venue",
+    nightArtists:"Calvin Harris at Ushuaïa → Amnesia Glitterbox OR Pacha Music On OR Hï CAMELPHAT",
+    nightNote:"Biggest party day. Book a later IBZ–MUC flight if planning sunrise finish.",
+    nightAlts:["Amnesia Glitterbox (23:30–06:00, from ~€60)","Pacha Music On (23:00–06:00, from ~€70)","Hï CAMELPHAT (23:30+)"]
+  }
+];
 
-    const costs = [
-      { label: "Flights (all legs combined)", range: "€400–800" },
-      { label: "Accommodation (15 nights)", range: "€900–2,500" },
-      { label: "Activities & entry tickets", range: "€150–300" },
-      { label: "Food & drinks (incl. Oktoberfest)", range: "€600–1,200" },
-      { label: "Local transport", range: "€100–200" },
-    ];
+const tickets = [
+  { event:"Amnesia RESISTANCE Closing Party", date:"Wed 16 Sep, 23:00–06:00", cost:"From ~€60", flag:"🚨 Priority Buy" },
+  { event:"Ushuaïa Calvin Harris", date:"Fri 18 Sep, 17:00–23:00", cost:"From ~€140", flag:"🚨 Priority Buy" },
+  { event:"Amnesia Glitterbox", date:"Fri 18 Sep, 23:30–06:00", cost:"From ~€60", flag:"Disc/house classic" },
+  { event:"Pacha Music On", date:"Fri 18 Sep, 23:00–06:00", cost:"From ~€70", flag:"Tech-house" },
+  { event:"Ushuaïa Martin Garrix", date:"Thu 17 Sep, 17:00–23:00", cost:"From ~€75", flag:"Big outdoor show" },
+  { event:"Pukka Up Sunset Boat Party", date:"Thu 17 Sep, 17:00–20:00", cost:"From ~€65", flag:"Sunset boat" },
+  { event:"Pacha Purple Disco Machine", date:"Thu 17 Sep, 23:00–06:00", cost:"From ~€30", flag:"Disco/house night" },
+  { event:"Chinois Defected", date:"Thu 17 Sep, 23:30–06:30", cost:"From ~€30", flag:"House music" },
+  { event:"Cruise Crush Boat Party", date:"Fri 18 Sep, 14:30–17:30", cost:"From ~€69", flag:"Boat party value" },
+  { event:"Oceanbeat Afternoon Boat Party", date:"Fri 18 Sep, 14:30–17:30", cost:"From ~€100", flag:"Boat alternative" },
+  { event:"O Beach Music", date:"Thu 17 Sep, 13:00–22:00", cost:"From ~€15", flag:"Day club" },
+  { event:"Formentera With Benefits", date:"Thu 17 Sep, 10:30–20:15", cost:"From ~€180", flag:"Premium yacht day" }
+];
 
-    function App() {
-      const [filter, setFilter] = useState("all");
-      const [expanded, setExpanded] = useState(new Set());
+const ibizaBases = [
+  { area:"Playa d'en Bossa", why:"Best for party convenience — close to Ushuaïa, Hï, boat-party departures and easy airport access.", tradeoff:"Can feel touristy and expensive. Best if nightlife is the priority." },
+  { area:"Ibiza Town / Talamanca", why:"Best balanced base — Dalt Vila, marina, restaurants, beach access and taxi reach to all clubs.", tradeoff:"Slightly less walkable to Playa d'en Bossa mega-clubs." },
+  { area:"San Antonio", why:"Best for sunset bars (Café del Mar) and some boat parties (Pukka Up). Usually more budget options.", tradeoff:"Farther from Ibiza Town, Pacha, Amnesia, Hï and Ushuaïa — taxi costs add up." }
+];
 
-      const toggleExpand = (id) => {
-        const next = new Set(expanded);
-        next.has(id) ? next.delete(id) : next.add(id);
-        setExpanded(next);
-      };
+const routes = [
+  { route:"DUS Airport → Düsseldorf city", best:"Train/S-Bahn or regional train", dur:"~10–20 min", cost:"€3–8", note:"Taxi only for heavy luggage or late-night delays." },
+  { route:"Düsseldorf → Barcelona", best:"Direct flight (DUS → BCN)", dur:"2h 05–20 min flight; ~5h door-to-door", cost:"€80–180 basic fare (add bags)", note:"Fly on 12 Sep. Train is impractical for this itinerary." },
+  { route:"Barcelona → Ibiza", best:"Direct flight (BCN → IBZ)", dur:"55 min–1h 10 flight; ~3–4h door-to-door", cost:"€40–120 basic fare", note:"Book morning/early afternoon on 16 Sep to make the closing party." },
+  { route:"Ibiza → Munich", best:"Direct flight if timing works (IBZ → MUC)", dur:"2h 10–25 min flight; ~5–6h door-to-door", cost:"€120–260 (high season + Oktoberfest)", note:"Backup: one-stop via BCN, PMI, MAD or FRA. Avoid too-early a flight after Fri 18 party night." },
+  { route:"Munich → Düsseldorf", best:"ICE train (strongly recommended)", dur:"~4h 33 min fastest; average ~5h", cost:"€30–140 advance to flexible", note:"City-centre to city-centre — no airport transfers. Much more convenient than flying." },
+  { route:"Düsseldorf hotel → Airport (25 Sep)", best:"Train or taxi", dur:"Allow 30–45 min from central hotel + buffer", cost:"€3–8 train; more for taxi", note:"For 15:00 flight, leave hotel at 11:30–12:00 depending on bags." }
+];
 
-      const shown = filter === "all" ? days : days.filter(d => d.phase === filter);
-      const allExpanded = shown.length > 0 && shown.every(d => expanded.has(d.id));
+const bookings = [
+  { n:1, item:"Munich accommodation — Oktoberfest period. Book IMMEDIATELY. Prices are 3–4× normal, availability disappears months out." },
+  { n:2, item:"Amnesia RESISTANCE Closing Party (16 Sep) — buy now through official Amnesia site." },
+  { n:3, item:"Your preferred 18 Sep headline: Ushuaïa Calvin Harris sells out fast. Buy once flights are confirmed." },
+  { n:4, item:"All three flights in order: DUS → BCN, then BCN → IBZ, then IBZ → MUC. Add checked bags upfront." },
+  { n:5, item:"Sagrada Família timed tickets — sell out weeks ahead (€26–36)." },
+  { n:6, item:"Park Güell timed entry — book after Sagrada times are fixed (€10)." },
+  { n:7, item:"Montserrat ticket — Trans Montserrat or Tot Montserrat once hotel/flight times are locked." },
+  { n:8, item:"Neuschwanstein Castle entry (~€22) — book online to skip very long queues." },
+  { n:9, item:"Ibiza boat/beach club events (17–18 Sep) — buy ONLY through official club or venue sites. Reconfirm lineups before travelling." }
+];
 
-      const toggleAll = () => {
-        const next = new Set(expanded);
-        shown.forEach(d => allExpanded ? next.delete(d.id) : next.add(d.id));
-        setExpanded(next);
-      };
+// ───────────────────────────── CONFIG ─────────────────────────────
 
-      return (
-        <div className="min-h-screen bg-gray-100 p-3">
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-800 text-white rounded-2xl p-5 mb-4 shadow-xl">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-2xl">🌍</span>
-                <h1 className="text-xl font-bold">Europe Trip — Sep 10–25, 2025</h1>
-              </div>
-              <p className="text-blue-300 text-sm mb-4">Germany · Spain · Oktoberfest · 16 Days · 8 Destinations</p>
-              <div className="flex flex-wrap gap-1.5 text-xs">
-                {["🇩🇪 Düsseldorf","⛪ Cologne","🇪🇸 Barcelona","🏝️ Ibiza","🥘 Valencia","🍺 Munich","🏰 Neuschwanstein","🏯 Nuremberg"].map((city, i, arr) => (
-                  <span key={i} className="flex items-center gap-1">
-                    <span className="bg-white bg-opacity-20 rounded px-2 py-1">{city}</span>
-                    {i < arr.length - 1 && <span className="text-blue-400">›</span>}
-                  </span>
-                ))}
-              </div>
-            </div>
+const pc = {
+  germany:    { hdr:"bg-blue-800",   body:"bg-blue-50",   border:"border-blue-200" },
+  spain:      { hdr:"bg-rose-700",   body:"bg-rose-50",   border:"border-rose-200" },
+  ibiza:      { hdr:"bg-violet-800", body:"bg-violet-50", border:"border-violet-200" },
+  oktoberfest:{ hdr:"bg-amber-600",  body:"bg-amber-50",  border:"border-amber-200" },
+  travel:     { hdr:"bg-slate-600",  body:"bg-slate-50",  border:"border-slate-200" }
+};
 
-            <div className="flex flex-wrap gap-2 mb-3 items-center">
-              {filters.map(f => (
-                <button key={f.key} onClick={() => setFilter(f.key)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all shadow-sm border ${filter === f.key ? `${f.activeClass} border-transparent` : "bg-white text-slate-600 border-gray-200 hover:bg-gray-50"}`}>
-                  {f.label}
-                </button>
-              ))}
-              <button onClick={toggleAll}
-                className="ml-auto px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-500 border border-gray-200 hover:bg-gray-50 shadow-sm">
-                {allExpanded ? "Collapse All ▲" : "Expand All ▼"}
+const filters = [
+  { key:"all",         label:"All 16 Days",    ac:"bg-slate-900 text-white" },
+  { key:"germany",     label:"🇩🇪 Germany",     ac:"bg-blue-800 text-white" },
+  { key:"spain",       label:"🇪🇸 Barcelona",   ac:"bg-rose-700 text-white" },
+  { key:"ibiza",       label:"🏝️ Ibiza",        ac:"bg-violet-800 text-white" },
+  { key:"oktoberfest", label:"🍺 Oktoberfest",  ac:"bg-amber-600 text-white" },
+  { key:"travel",      label:"✈️ Travel Days",  ac:"bg-slate-600 text-white" }
+];
+
+// ───────────────────────────── ITINERARY TAB ─────────────────────────────
+
+function ItineraryTab() {
+  const [filter, setFilter] = useState("all");
+  const [exp, setExp] = useState(new Set());
+
+  const toggle = (id) => {
+    const n = new Set(exp); n.has(id) ? n.delete(id) : n.add(id); setExp(n);
+  };
+  const shown = filter === "all" ? days : days.filter(d => d.phase === filter);
+  const allOpen = shown.length > 0 && shown.every(d => exp.has(d.id));
+  const toggleAll = () => {
+    const n = new Set(exp); shown.forEach(d => allOpen ? n.delete(d.id) : n.add(d.id)); setExp(n);
+  };
+
+  return (
+    <div>
+      {/* Stay summary */}
+      <div className="bg-white rounded-xl p-4 mb-4 shadow-sm border border-gray-200">
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Stay Summary</p>
+        <div className="flex flex-wrap gap-2 text-xs">
+          {[
+            { l:"🇩🇪 Düsseldorf", n:"2 nights", c:"bg-blue-100 text-blue-800" },
+            { l:"🇪🇸 Barcelona", n:"4 nights", c:"bg-rose-100 text-rose-800" },
+            { l:"🏝️ Ibiza", n:"3 nights", c:"bg-violet-100 text-violet-800" },
+            { l:"🍺 Munich", n:"5 nights", c:"bg-amber-100 text-amber-800" },
+            { l:"🇩🇪 Düsseldorf", n:"1 night", c:"bg-blue-100 text-blue-800" }
+          ].map((s,i,a) => (
+            <span key={i} className="flex items-center gap-1">
+              <span className={`rounded-full px-3 py-1 font-medium ${s.c}`}>{s.l} · {s.n}</span>
+              {i < a.length-1 && <span className="text-gray-300">›</span>}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-2 mb-3 items-center">
+        {filters.map(f => (
+          <button key={f.key} onClick={() => setFilter(f.key)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${filter===f.key ? `${f.ac} border-transparent shadow` : "bg-white text-slate-600 border-gray-200 hover:bg-gray-50"}`}>
+            {f.label}
+          </button>
+        ))}
+        <button onClick={toggleAll}
+          className="ml-auto px-3 py-1.5 rounded-full text-xs bg-white text-slate-500 border border-gray-200 hover:bg-gray-50">
+          {allOpen ? "Collapse All ▲" : "Expand All ▼"}
+        </button>
+      </div>
+
+      {/* Day cards */}
+      <div className="space-y-2">
+        {shown.map(d => {
+          const s = pc[d.phase]; const open = exp.has(d.id);
+          return (
+            <div key={d.id} className={`rounded-xl overflow-hidden shadow-sm border ${s.border}`}>
+              <button className={`w-full ${s.hdr} text-white px-4 py-3 flex justify-between items-center text-left`}
+                onClick={() => toggle(d.id)}>
+                <div className="flex items-center gap-3">
+                  <span className="text-xl leading-none">{d.emoji}</span>
+                  <div>
+                    <div className="font-semibold text-sm">{d.city}</div>
+                    <div className="text-xs opacity-70">{d.sub}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className="text-right">
+                    <div className="text-xs opacity-60">{d.day}</div>
+                    <div className="text-xs font-semibold">{d.date}</div>
+                  </div>
+                  <span className="text-xs opacity-60">{open ? "▲" : "▼"}</span>
+                </div>
               </button>
-            </div>
-
-            <div className="space-y-2">
-              {shown.map((day) => {
-                const pc = phaseConfig[day.phase];
-                const isOpen = expanded.has(day.id);
-                return (
-                  <div key={day.id} className={`rounded-xl overflow-hidden shadow-sm border ${pc.cardBorder}`}>
-                    <button className={`w-full ${pc.headerBg} text-white px-4 py-3 flex justify-between items-center text-left`}
-                      onClick={() => toggleExpand(day.id)}>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xl leading-none">{day.emoji}</span>
-                        <div>
-                          <div className="font-semibold text-sm leading-tight">{day.city}</div>
-                          <div className="text-xs opacity-70">{day.subtitle}</div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 shrink-0">
-                        <div className="text-right">
-                          <div className="text-xs opacity-60">{day.day}</div>
-                          <div className="text-xs font-semibold">{day.date}</div>
-                        </div>
-                        <span className="text-xs opacity-70">{isOpen ? "▲" : "▼"}</span>
-                      </div>
-                    </button>
-
-                    {isOpen && (
-                      <div className={`${pc.cardBg} p-4`}>
-                        <ul className="space-y-2 mb-3">
-                          {day.activities.map((a, i) => (
-                            <li key={i} className="flex gap-2.5 text-sm text-gray-700">
-                              <span className="text-base shrink-0 leading-snug">{a.icon}</span>
-                              <span className="leading-snug">{a.text}</span>
-                            </li>
-                          ))}
-                        </ul>
-
-                        {day.travelOptions && (
-                          <div className="bg-white rounded-lg border border-gray-200 p-3 mt-3">
-                            <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2.5">
-                              {day.travelOptions.label}: {day.travelOptions.from} → {day.travelOptions.to}
-                            </div>
-                            <div className="space-y-2.5">
-                              {day.travelOptions.options.map((opt, i) => (
-                                <div key={i} className="flex flex-wrap gap-1.5 items-center">
-                                  <span className="font-semibold text-sm text-gray-800">{opt.mode}</span>
-                                  <span className="bg-emerald-100 text-emerald-700 rounded-full px-2 py-0.5 text-xs font-medium">⏱ {opt.dur}</span>
-                                  <span className="bg-blue-100 text-blue-700 rounded-full px-2 py-0.5 text-xs font-medium">💶 {opt.cost}</span>
-                                  <span className="text-gray-400 text-xs">{opt.note}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {day.tip && (
-                          <div className="mt-3 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                            <p className="text-xs text-yellow-900 leading-relaxed">
-                              <span className="font-bold">💡 Tip: </span>{day.tip}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
+              {open && (
+                <div className={`${s.body} p-4 space-y-3`}>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="bg-white rounded-lg p-3 border border-gray-100">
+                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1.5">☀️ Morning / Afternoon</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">{d.am}</p>
+                    </div>
+                    <div className="bg-white rounded-lg p-3 border border-gray-100">
+                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1.5">🌙 Evening / Night</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">{d.pm}</p>
+                    </div>
                   </div>
-                );
-              })}
-            </div>
-
-            <div className="mt-5 bg-white rounded-xl border border-red-200 p-4 shadow-sm">
-              <h3 className="font-bold text-red-700 mb-3 text-sm">🚨 Book These Immediately</h3>
-              <div className="space-y-2">
-                {bookings.map((b, i) => (
-                  <div key={i} className="flex gap-2 text-sm text-gray-700">
-                    <span className="shrink-0">{b.icon}</span>
-                    <span>{b.text}</span>
+                  {d.travel && (
+                    <div className="bg-white rounded-lg p-3 border border-gray-200">
+                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">✈️ Travel: {d.travel.from} → {d.travel.to}</p>
+                      <div className="space-y-2">
+                        {d.travel.opts.map((o,i) => (
+                          <div key={i} className="flex flex-wrap gap-1.5 items-center">
+                            <span className="font-semibold text-sm text-gray-800">{o.mode}</span>
+                            <span className="bg-emerald-100 text-emerald-700 rounded-full px-2 py-0.5 text-xs">⏱ {o.dur}</span>
+                            <span className="bg-blue-100 text-blue-700 rounded-full px-2 py-0.5 text-xs">💶 {o.cost}</span>
+                            <span className="text-gray-400 text-xs">{o.note}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                    <p className="text-xs text-yellow-900 leading-relaxed"><span className="font-bold">💡 Tip: </span>{d.tip}</p>
                   </div>
-                ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────────────── BARCELONA TAB ─────────────────────────────
+
+function BarcelonaTab() {
+  return (
+    <div className="space-y-4">
+      <div className="bg-rose-700 text-white rounded-xl p-4">
+        <h2 className="font-bold text-lg mb-1">🇪🇸 Barcelona — 4 Nights (Sat 12 – Tue 15 Sep)</h2>
+        <p className="text-rose-100 text-sm">Built around: tapas crawl, food market, Gothic Quarter, La Rambla, Sagrada Família, Park Güell, Gaudí architecture, Montjuïc, Montserrat and beach time.</p>
+        <div className="mt-3 bg-rose-800 rounded-lg p-3 text-sm">
+          <span className="font-bold">⚠️ Note: </span>Barcelona has a citywide 24-hour pub crawl ban — no organized pub crawl packages. A self-guided El Born/Gothic tapas route is better and legal.
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3">
+        {bcnExperiences.map((e,i) => (
+          <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-rose-100">
+            <div className="flex justify-between items-start gap-2 mb-2">
+              <h3 className="font-semibold text-gray-900 text-sm">{e.title}</h3>
+              <span className="bg-rose-100 text-rose-700 rounded-full px-2 py-0.5 text-xs shrink-0">{e.slot}</span>
+            </div>
+            <p className="text-sm text-gray-600 mb-1"><span className="font-medium text-gray-700">How: </span>{e.how}</p>
+            <p className="text-xs text-gray-400"><span className="font-medium">Why it fits: </span>{e.why}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-xl p-4 shadow-sm border border-rose-100">
+        <h3 className="font-semibold text-gray-900 mb-3">🍷 Self-Guided Tapas & Bar-Hop Route</h3>
+        <div className="space-y-2">
+          {[
+            "Start with La Boqueria snacks if still open, then walk into the Gothic Quarter for a first drink around Plaça Reial or the Cathedral lanes.",
+            "Continue into El Born for tapas and cocktails — old-town energy without a packaged crawl.",
+            "On the Montserrat night (Mon 14), use Poble-sec/Carrer de Blai for a lower-effort pintxos crawl close to Montjuïc.",
+            "Keep public-drinking rules in mind and avoid promoters selling pub-crawl-style packages."
+          ].map((s,i) => (
+            <div key={i} className="flex gap-2.5 text-sm text-gray-700">
+              <span className="text-rose-500 shrink-0 font-bold">{i+1}.</span>
+              <span>{s}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────────────── IBIZA TAB ─────────────────────────────
+
+function IbizaTab() {
+  const [view, setView] = useState("plan");
+  return (
+    <div className="space-y-4">
+      <div className="bg-violet-800 text-white rounded-xl p-4">
+        <h2 className="font-bold text-lg mb-1">🏝️ Ibiza — 3 Nights (Wed 16 – Fri 18 Sep)</h2>
+        <p className="text-violet-200 text-sm">Optimized for closing parties, DJ nights, boat parties and beach clubs. Route built around the confirmed Amnesia RESISTANCE Closing Party on 16 Sep.</p>
+        <div className="mt-3 bg-violet-900 rounded-lg p-3 text-sm">
+          <span className="font-bold">ℹ️ Reality check: </span>Many grand season closings happen after you leave for Munich. RESISTANCE on 16 Sep is the strongest confirmed event in this window — the route is built to land you there in time.
+        </div>
+      </div>
+
+      {/* Sub-nav */}
+      <div className="flex gap-2">
+        {[{k:"plan",l:"📅 Party Plan"},{k:"tickets",l:"🎫 Tickets"},{k:"bases",l:"🏨 Where to Stay"}].map(t => (
+          <button key={t.k} onClick={() => setView(t.k)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${view===t.k ? "bg-violet-800 text-white border-transparent" : "bg-white text-slate-600 border-gray-200 hover:bg-gray-50"}`}>
+            {t.l}
+          </button>
+        ))}
+      </div>
+
+      {view === "plan" && (
+        <div className="space-y-3">
+          {ibizaDays.map((day,i) => (
+            <div key={i} className="bg-white rounded-xl shadow-sm border border-violet-200 overflow-hidden">
+              <div className="bg-violet-700 text-white px-4 py-2.5 flex justify-between items-center">
+                <span className="font-bold text-sm">{day.date}</span>
+                {day.priority && <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">🔥 Priority Night</span>}
               </div>
-            </div>
-
-            <div className="mt-3 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-              <h3 className="font-bold text-gray-800 mb-3 text-sm">💶 Estimated Budget (per person)</h3>
-              <div className="space-y-1.5 text-sm">
-                {costs.map((r, i) => (
-                  <div key={i} className="flex justify-between gap-3">
-                    <span className="text-gray-500">{r.label}</span>
-                    <span className="font-semibold text-gray-800 shrink-0">{r.range}</span>
+              <div className="p-4 space-y-3">
+                <div className="bg-violet-50 rounded-lg p-3">
+                  <p className="text-xs font-bold text-violet-600 uppercase tracking-wide mb-1">☀️ Daytime</p>
+                  <p className="text-sm text-gray-700">{day.daytime}</p>
+                </div>
+                <div className={`rounded-lg p-3 ${day.priority ? "bg-red-50 border border-red-200" : "bg-gray-50"}`}>
+                  <div className="flex justify-between items-start mb-1">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">🌙 Night</p>
+                    <span className="bg-emerald-100 text-emerald-700 text-xs rounded-full px-2 py-0.5">{day.nightCost}</span>
                   </div>
-                ))}
-                <div className="border-t border-gray-200 pt-2 mt-2 flex justify-between font-bold text-gray-900">
-                  <span>Estimated Total</span>
-                  <span>€2,150–5,000+</span>
+                  <p className="font-semibold text-gray-900 text-sm">{day.nightName}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{day.nightTime}</p>
+                  {day.nightArtists && <p className="text-xs text-violet-700 mt-1 font-medium">{day.nightArtists}</p>}
+                  {day.nightNote && <p className="text-xs text-gray-500 mt-1 italic">{day.nightNote}</p>}
+                  {day.nightAlts.length > 0 && (
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-400 font-medium mb-1">Alternatives:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {day.nightAlts.map((a,j) => <span key={j} className="bg-white border border-gray-200 text-gray-600 text-xs rounded px-2 py-0.5">{a}</span>)}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-              <p className="text-xs text-gray-400 mt-2">Note: Ibiza and Munich during Oktoberfest are premium-priced. Booking early significantly reduces costs.</p>
             </div>
+          ))}
+        </div>
+      )}
 
-            <p className="text-center text-xs text-gray-400 mt-4 mb-2">Bon voyage! 🌍</p>
+      {view === "tickets" && (
+        <div className="space-y-2">
+          <p className="text-xs text-gray-500 bg-yellow-50 border border-yellow-200 rounded-lg p-3">💡 Buy only through official club sites or trusted ticket sellers. Reconfirm times and lineups close to the date.</p>
+          {tickets.map((t,i) => (
+            <div key={i} className="bg-white rounded-lg p-3 shadow-sm border border-violet-100 flex justify-between items-start gap-3">
+              <div>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="font-semibold text-sm text-gray-900">{t.event}</span>
+                  {t.flag.includes("Priority") && <span className="bg-red-100 text-red-700 text-xs rounded-full px-2 py-0.5">{t.flag}</span>}
+                </div>
+                <p className="text-xs text-gray-400">{t.date}</p>
+                {!t.flag.includes("Priority") && <p className="text-xs text-violet-500 mt-0.5">{t.flag}</p>}
+              </div>
+              <span className="bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full px-2 py-1 shrink-0">{t.cost}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {view === "bases" && (
+        <div className="space-y-3">
+          {ibizaBases.map((b,i) => (
+            <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-violet-200">
+              <h3 className="font-bold text-violet-800 mb-2">{i===0?"⭐ ":""}{b.area}</h3>
+              <p className="text-sm text-gray-700 mb-2"><span className="font-medium text-gray-900">Why: </span>{b.why}</p>
+              <p className="text-sm text-gray-500"><span className="font-medium text-gray-700">Trade-off: </span>{b.tradeoff}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ───────────────────────────── TRAVEL TAB ─────────────────────────────
+
+function TravelTab() {
+  return (
+    <div className="space-y-3">
+      <div className="bg-slate-700 text-white rounded-xl p-4">
+        <h2 className="font-bold text-lg">✈️ Travel Routes, Durations & Costs</h2>
+        <p className="text-slate-300 text-sm mt-1">All 6 legs of the trip. Costs are per person, basic fare, excluding checked bags.</p>
+      </div>
+      {routes.map((r,i) => (
+        <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
+          <div className="flex justify-between items-start mb-2 gap-2">
+            <h3 className="font-bold text-gray-900 text-sm">{r.route}</h3>
+            <span className="bg-slate-100 text-slate-700 text-xs rounded-full px-2 py-0.5 shrink-0">Leg {i+1}</span>
+          </div>
+          <p className="text-sm text-gray-700 mb-2"><span className="font-medium">Best option: </span>{r.best}</p>
+          <div className="flex flex-wrap gap-2 mb-2">
+            <span className="bg-emerald-100 text-emerald-700 rounded-full px-2 py-0.5 text-xs">⏱ {r.dur}</span>
+            <span className="bg-blue-100 text-blue-700 rounded-full px-2 py-0.5 text-xs">💶 {r.cost}</span>
+          </div>
+          <p className="text-xs text-gray-400">{r.note}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ───────────────────────────── BOOK NOW TAB ─────────────────────────────
+
+function BookNowTab() {
+  return (
+    <div className="space-y-4">
+      <div className="bg-red-600 text-white rounded-xl p-4">
+        <h2 className="font-bold text-lg">🚨 Booking Priority Order</h2>
+        <p className="text-red-100 text-sm mt-1">Do these in order. The top 3 are time-critical and should be done before anything else.</p>
+      </div>
+      <div className="space-y-2">
+        {bookings.map((b,i) => (
+          <div key={i} className={`bg-white rounded-xl p-4 shadow-sm border flex gap-3 items-start ${i < 3 ? "border-red-200" : "border-gray-200"}`}>
+            <span className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${i < 3 ? "bg-red-600 text-white" : "bg-gray-200 text-gray-600"}`}>{b.n}</span>
+            <p className="text-sm text-gray-700 leading-relaxed">{b.item}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <h3 className="font-bold text-amber-800 mb-2">💶 Rough Budget Estimate (per person)</h3>
+        <div className="space-y-1.5 text-sm">
+          {[
+            ["Flights (all legs)", "€350–700"],
+            ["Accommodation (15 nights)", "€900–2,500"],
+            ["Ibiza tickets & events (3 nights)", "€200–500+"],
+            ["Barcelona activities", "€80–150"],
+            ["Oktoberfest + Munich activities", "€200–400"],
+            ["Food & drinks", "€600–1,200"],
+            ["Local transport", "€100–200"]
+          ].map(([l,v],i) => (
+            <div key={i} className="flex justify-between gap-2">
+              <span className="text-gray-500">{l}</span>
+              <span className="font-semibold text-gray-800 shrink-0">{v}</span>
+            </div>
+          ))}
+          <div className="border-t border-amber-300 pt-2 mt-2 flex justify-between font-bold text-gray-900">
+            <span>Estimated Total</span>
+            <span>€2,430–5,650+</span>
           </div>
         </div>
-      );
-    }
+        <p className="text-xs text-gray-400 mt-2">Ibiza closing parties and Oktoberfest accommodation drive the upper end. Book early to stay closer to the lower range.</p>
+      </div>
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
+      <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+        <h3 className="font-semibold text-gray-900 mb-2 text-sm">📋 Sources Verified in Document</h3>
+        <div className="space-y-1 text-xs text-gray-500">
+          <p>• Ibiza events: Ibiza Spotlight party calendar for 16, 17 & 18 September 2026</p>
+          <p>• Barcelona: Official La Boqueria, Park Güell, Sagrada Família & Montserrat pages</p>
+          <p>• Regulation: Catalan News report on Barcelona 24-hr pub crawl ban</p>
+          <p>• Oktoberfest: Official Oktoberfest.de 2026 dates and programme</p>
+          <p>• Transport: DB/Trainline ICE data; flight aggregators for DUS-BCN, BCN-IBZ, IBZ-MUC</p>
+          <p className="text-yellow-600 mt-2 font-medium">⚠️ Treat all event lineups and prices as planning inputs — reconfirm on official sites before buying.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────────────── MAIN APP ─────────────────────────────
+
+const tabConfig = [
+  { id:"itinerary", label:"📅 Day by Day" },
+  { id:"barcelona", label:"🇪🇸 Barcelona" },
+  { id:"ibiza",     label:"🏝️ Ibiza" },
+  { id:"travel",    label:"✈️ Travel" },
+  { id:"book",      label:"🚨 Book Now" }
+];
+
+function App() {
+  const [tab, setTab] = useState("itinerary");
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* HEADER */}
+      <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-blue-800 text-white px-4 pt-5 pb-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-2xl">🌍</span>
+            <h1 className="text-xl font-bold">Europe Trip — Sep 10–25, 2026</h1>
+          </div>
+          <p className="text-blue-300 text-sm mb-3">Germany · Barcelona · Ibiza · Oktoberfest · 16 Days</p>
+          <div className="flex flex-wrap gap-1.5 text-xs">
+            {["🇩🇪 Düsseldorf","🇪🇸 Barcelona","🏝️ Ibiza","🍺 Munich","🏰 Neuschwanstein"].map((c,i,a) => (
+              <span key={i} className="flex items-center gap-1">
+                <span className="bg-white bg-opacity-20 rounded px-2 py-1">{c}</span>
+                {i < a.length-1 && <span className="text-blue-400">›</span>}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* STICKY TABS */}
+      <div className="sticky-nav shadow-md">
+        <div className="max-w-3xl mx-auto flex overflow-x-auto">
+          {tabConfig.map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)}
+              className={`px-4 py-3 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${tab===t.id ? "border-blue-400 text-blue-300 bg-slate-800" : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800"}`}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* CONTENT */}
+      <div className="max-w-3xl mx-auto p-4 pb-10">
+        {tab === "itinerary" && <ItineraryTab />}
+        {tab === "barcelona" && <BarcelonaTab />}
+        {tab === "ibiza"     && <IbizaTab />}
+        {tab === "travel"    && <TravelTab />}
+        {tab === "book"      && <BookNowTab />}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
 </body>
 </html>
